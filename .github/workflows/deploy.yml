@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
 
+env:
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
 jobs:
   deploy-backend:
     name: Deploy Backend
@@ -16,14 +19,7 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy Backend to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway up ./backend \
-            --path-as-root \
-            --service backend \
-            --detach \
-            --project ${{ secrets.RAILWAY_PROJECT_ID }}
+        run: railway up ./backend --path-as-root --service 1decfeca-a4c9-448b-9d4b-5c674b98c00f --environment production --detach
 
   deploy-frontend:
     name: Deploy Frontend
@@ -37,11 +33,4 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy Frontend to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway up ./frontend \
-            --path-as-root \
-            --service frontend \
-            --detach \
-            --project ${{ secrets.RAILWAY_PROJECT_ID }}
+        run: railway up ./frontend --path-as-root --service cfcb0105-0cda-4e2b-8c32-60caa38d7596 --environment production --detach
