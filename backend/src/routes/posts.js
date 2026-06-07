@@ -9,19 +9,14 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, path.join(__dirname, '../../uploads')),
   filename:    (req, file, cb) => cb(null, `${uuidv4()}${path.extname(file.originalname)}`),
 });
+const ALLOWED_EXT = ['.pdf', '.ppt', '.pptx', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+
 const upload = multer({
   storage,
   limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = [
-      'application/pdf',
-      'application/vnd.ms-powerpoint',
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'image/jpeg', 'image/png',
-    ];
-    allowed.includes(file.mimetype) ? cb(null, true) : cb(new Error('지원하지 않는 파일 형식입니다.'));
+    const ext = path.extname(file.originalname).toLowerCase();
+    ALLOWED_EXT.includes(ext) ? cb(null, true) : cb(new Error('지원하지 않는 파일 형식입니다.'));
   },
 });
 
